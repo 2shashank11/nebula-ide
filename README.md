@@ -30,11 +30,6 @@ A scalable, cloud-based Integrated Development Environment that provides secure 
 - `container-runner`: Manages container lifecycle and terminal execution
 - `client`: Browser-based IDE interface
 
-## 🛠️ Planned Features
-
-- ⏳ Real-time collaborative editing (multi-user rooms)  
-- 🧪 Language-specific sandboxing and debugging support
-
 ## 🚀 Setup Instructions
 
 > Make sure Docker and Node.js are installed.
