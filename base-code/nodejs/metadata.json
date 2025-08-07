@@ -1,0 +1,5 @@
+{
+    "language": "js",
+    "environment": "nodejs",
+    "entry_point": "index.js"
+}

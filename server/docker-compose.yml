@@ -1,0 +1,40 @@
+version: '3.9'
+
+services:
+
+  nginx:
+    image: nginx:alpine
+    container_name: reverse-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - main-server
+      - container-runner
+
+  main-server:
+    build: ./main-server
+    container_name: main-server
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://user:pass@db:5432/nebula  # CHANGE THIS
+    volumes:
+      - ./main-server:/app
+    networks:
+      - nebula-net
+
+  container-runner:
+    build: ./container-runner
+    container_name: container-runner
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./container-runner:/app
+    networks:
+      - nebula-net
+
+networks:
+  nebula-net:
+    driver: bridge

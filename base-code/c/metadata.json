@@ -1,0 +1,5 @@
+{
+    "language": "c",
+    "environment": "c",
+    "entry_point": "main.c"
+}

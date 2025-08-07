@@ -1,0 +1,5 @@
+{
+    "language": "python",
+    "environment": "python",
+    "entry_point": "main.py"
+}

@@ -1,0 +1,5 @@
+{
+    "language": "typescript",
+    "environment": "typescript",
+    "entry_point": "index.ts"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "container-runner",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+   "nodemonConfig": {
+    "ignore": [
+      "user-files/*"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.842.0",
+    "chokidar": "^4.0.3",
+    "cookie-parser": "^1.4.7",
+    "dockerode": "^4.0.7",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "redis": "^5.6.0",
+    "socket.io": "^4.8.1",
+    "tar-stream": "^3.1.7"
+  }
+}

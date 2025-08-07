@@ -1,0 +1,5 @@
+{
+    "language": "go",
+    "environment": "go",
+    "entry_point": "main.go"
+}

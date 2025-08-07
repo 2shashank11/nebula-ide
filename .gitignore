@@ -1,0 +1,33 @@
+# CLIENT
+
+client/logs
+client/*.log
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
+client/lerna-debug.log*
+
+client/node_modules
+client/dist
+client/dist-ssr
+client/*.local
+
+# Editor directories and files
+client/.vscode/*
+client/!.vscode/extensions.json
+client/.idea
+client/.DS_Store
+
+
+# SERVER
+
+# main-server
+server/main-server/node_modules
+server/main-server/dist
+server/main-server/.env
+
+# container-runner
+server/container-runner/node_modules
+server/container-runner/dist
+server/container-runner/.env
