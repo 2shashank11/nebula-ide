@@ -3,6 +3,7 @@ import React from 'react'
 import { Button } from './ui/button'
 import { useTerminalSocket } from '@/context/TerminalSocketContext'
 import { getFileLanguage } from '@/lib/languages'
+import { toast } from 'sonner'
 
 type EditorHeaderProps = {
     selectedFile: string
@@ -13,9 +14,13 @@ const EditorHeader = ({ selectedFile, saved }: EditorHeaderProps) => {
 
     const {socket} = useTerminalSocket()
 
+    socket?.on('terminal:error', (error) => {
+        toast.error(error)
+    })
+
     const handleExecuteCode = () => {
         if(!selectedFile || !socket) return;
-        
+
         if (socket) {
             const fileName = selectedFile.split('/').pop() || '';
             const extension = fileName.split('.')[1] || '';

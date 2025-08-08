@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Editor from '@monaco-editor/react'
 import { useRef } from 'react'
 import * as monaco from 'monaco-editor'
@@ -14,22 +14,39 @@ type CodeEditorProps = {
 const CodeEditor: React.FC<CodeEditorProps> = ({ selectedFile, code, language, setCode }) => {
 
     const {socket} = useTerminalSocket();
+    const [terminalConnected, setTerminalConnected] = useState(false);
 
-    useEffect(() => {
-        if (!selectedFile || !socket) {
-            return;
+    const handleCodeChange = (code: string) => {
+        setCode(code);
+        socket?.emit('file:change', { filePath: selectedFile, content: code });
+        if(code == ''){
+            socket?.emit('file:change', { filePath: selectedFile, content: "\0" });
         }
-
-        if(code && socket){
-            const timer = setTimeout(() => {
-                console.log(`Emitting file change for ${selectedFile}`);
-                socket.emit('file:change', { filePath: selectedFile, content: code });
-            }, 2000)
-            return () => {
-                clearTimeout(timer);
-            }
+    }
+    
+    useEffect(() => {
+        if(socket){
+            setTerminalConnected(true);
+        }
+        else{
+            setTerminalConnected(false);
         }
     }, [socket])
+
+    useEffect(() => {
+        if(terminalConnected){
+
+            if(code && socket){
+                const timer = setTimeout(() => {
+                    console.log(`Emitting file change for ${selectedFile}`);
+                    socket.emit('file:change', { filePath: selectedFile, content: code });
+                }, 2000)
+                return () => {
+                    clearTimeout(timer);
+                }
+            }
+        }
+    }, [socket, terminalConnected])
 
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 
@@ -96,9 +113,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ selectedFile, code, language, s
             value={code}
             options={options}
             onChange={(value) => {
-                if (typeof value === 'string') {
-                    setCode(value);
-                }
+                handleCodeChange(value || '');
             }}
 
             onMount={handleEditorDidMount}

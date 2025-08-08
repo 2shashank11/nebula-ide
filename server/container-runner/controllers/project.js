@@ -38,22 +38,22 @@ function initializeNewProject(req, res) {
 }
 
 function getFileTree(dirPath) {
-  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+    const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
-  const result = [];
+    const result = [];
 
-  for (const entry of entries) {
-    const fullPath = path.join(dirPath, entry.name);
+    for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
 
-    if (entry.isDirectory()) {
-      const children = getFileTree(fullPath);
-      result.push([entry.name, children]);
-    } else {
-      result.push(entry.name);
+        if (entry.isDirectory()) {
+            const children = getFileTree(fullPath);
+            result.push([entry.name, children]);
+        } else {
+            result.push(entry.name);
+        }
     }
-  }
 
-  return result;
+    return result;
 }
 
 async function openExistingProject(req, res) {
@@ -69,7 +69,9 @@ async function openExistingProject(req, res) {
 
     if (containerId) {
         const container = docker.getContainer(containerId);
-        const fileTree = containerObject.fileTree ? JSON.parse(containerObject.fileTree) : null;
+        const projectDir = path.resolve(__dirname, '../user-files/' + projectId);
+        // const tree = getFileTreeArrayFormat(projectDir);
+        const fileTree = await getFileTree(projectDir);
         // send file tree to frontend
         return res.status(200).json({ message: 'Container already running', fileTree: fileTree, });
     }
@@ -86,7 +88,7 @@ async function openExistingProject(req, res) {
 
         try {
             const keys = await syncS3FolderToContainer(container.id, s3Prefix);
-            
+
             // get file tree from container
             // let files = keys.map(obj => obj.replace(s3Prefix + 'app/', ''));
             // files = files.filter(file => file !== s3Prefix + 'metadata.json'); 
@@ -119,7 +121,7 @@ async function getProjectFileTree(req, res) {
     return res.status(200).json({ fileTree: fileTree });
 }
 
-async function getFilecontent(req, res){
+async function getFilecontent(req, res) {
     const { projectId } = req.params;
     const filePath = req.body.filePath
     if (!projectId || !filePath) {

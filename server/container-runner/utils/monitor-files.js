@@ -3,12 +3,11 @@ const path = require('path');
 
 function watchProjectDirectory(localPath, io) {
   const watcher = chokidar.watch(localPath 
-//, {
-//     persistent: true,
-//     ignoreInitial: true,
-//     usePolling: true,
-//     interval: 300, // Polling interval in ms
-//   }
+, {
+    persistent: true,
+    ignoreInitial: true,
+    usePolling: true,
+  }
     );
 
   watcher.on('all', (event, filePath) => {

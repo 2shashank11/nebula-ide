@@ -1,4 +1,4 @@
-import { useEffect, useImperativeHandle, useRef, forwardRef } from 'react'
+import { useEffect, useImperativeHandle, useRef, forwardRef, useState } from 'react'
 import { Terminal as XTerminal } from '@xterm/xterm'
 import { FitAddon } from 'xterm-addon-fit'
 import {createTerminalSocket} from '@/socket'
@@ -16,17 +16,26 @@ type TerminalProps = {
 
 const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ projectId }, ref) => {
   const { socket } = useTerminalSocket()
-
+  
   const terminalRef = useRef<HTMLDivElement | null>(null)
   const fitAddon = useRef(new FitAddon())
   const isRendered = useRef(false)
   const socketRef = useRef<any>(null)
 
+  const [containerConnected, setContainerConnected] = useState(false)
   // console.log("Project ID", projectId)
 
   useImperativeHandle(ref, () => ({
     fit: () => fitAddon.current.fit(),
   }))
+
+  useEffect(() =>{
+  
+    if(socket){
+      setContainerConnected(true)
+    }
+
+  }, [socket])
 
   useEffect(() => {
     if (!socket) {
@@ -67,7 +76,7 @@ const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ projectId }, ref) 
     //   socket.off('terminal:data')
     // }
 
-  }, [socket])
+  }, [socket, containerConnected])
 
   return <div ref={terminalRef} className="h-full w-full scrollbar-custom" />
 })

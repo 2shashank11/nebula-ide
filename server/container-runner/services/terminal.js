@@ -23,17 +23,17 @@ module.exports = async function terminalService(socketNamespace) {
 
         let container;
         try{
-            container = await docker.getContainer(containerId);
+            container = docker.getContainer(containerId);
         } catch (err) {
             socket.disconnect();
             return;
         }
 
-        if (containerId && container) {
+        // if (containerId && container) {
             const projectDir = path.resolve(__dirname, '../user-files', projectId);
             watchProjectDirectory(projectDir, socket);
             socket.emit('file:refresh')
-        }
+        // }
 
         socket.on('file:change', async ({filePath, content}) => {
             if (!filePath || !content) {
@@ -41,10 +41,10 @@ module.exports = async function terminalService(socketNamespace) {
             }
             const relPath = '../user-files/' + projectId + '/' + filePath;
             const absPath = path.resolve(__dirname, relPath);
-            await fs.writeFile(absPath, content, (err) => {
+            fs.writeFile(absPath, content, (err) => {
                 if (err) {
                     console.error('Error writing file:', err);
-                } 
+                }
             })
         })
 
@@ -77,7 +77,7 @@ module.exports = async function terminalService(socketNamespace) {
                     stream.write('\r\n');
                 }
                 catch (err) {
-                    console.error('Error executing code:', err);
+                    // console.error('Error executing code:', err);
                     socket.emit('terminal:error', 'Error executing code: ' + err.message);
                 }
 
