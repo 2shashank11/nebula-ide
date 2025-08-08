@@ -107,9 +107,9 @@ export function AppSidebar({ setSelectedFile, ...props }: AppSidebarProps) {
     if (!socket) return;
     socket.on('file:refresh', fetchFileTree)
 
-    return () => {
-      socket.off('file:refresh', fetchFileTree)
-    }
+    // return () => {
+    //   socket.off('file:refresh', fetchFileTree)
+    // }
 
   }, [socket])
 

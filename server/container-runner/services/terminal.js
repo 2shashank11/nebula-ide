@@ -1,8 +1,9 @@
 const path = require('path');
 const fs = require('fs');
+const redisClient = require('../utils/redis-client');
 const {docker} = require('../utils/docker');
 const { watchProjectDirectory } = require('../utils/monitor-files');
-const redisClient = require('../utils/redis-client');
+const getRunCommand = require('../utils/run-command');
 
 module.exports = async function terminalService(socketNamespace) {
     socketNamespace.on('connection', async (socket) => {
@@ -53,18 +54,34 @@ module.exports = async function terminalService(socketNamespace) {
                 AttachStdin: true,
                 AttachStdout: true,
                 AttachStderr: true,
-                Tty: true            
+                Tty: true,
             });
 
             const stream = await exec.start({ hijack: true, stdin: true });
 
             stream.on('data', (chunk) => {
-                socket.emit('terminal:data', chunk.toString('utf-8'));
+                socket.emit('terminal:data', chunk.toString());
             });
 
             socket.on('terminal:write', (data) => {
                 stream.write(data);
             });
+
+            socket.on('code:execute', async({filePath, language}) => {
+                // const absPath = '/app' + filePath;
+                try{
+
+                    const runCommand = getRunCommand(filePath, language);
+                    // console.log(runCommand)
+                    stream.write(runCommand);
+                    stream.write('\r\n');
+                }
+                catch (err) {
+                    console.error('Error executing code:', err);
+                    socket.emit('terminal:error', 'Error executing code: ' + err.message);
+                }
+
+            })
 
             socket.on('disconnect', async () => {
                 console.log(`Client disconnected: ${socket.id}`);

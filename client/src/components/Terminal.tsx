@@ -63,9 +63,9 @@ const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ projectId }, ref) 
 
     socket.on('terminal:data', onTerminalData)
 
-    return () => {
-      socket.off('terminal:data')
-    }
+    // return () => {
+    //   socket.off('terminal:data')
+    // }
 
   }, [socket])
 

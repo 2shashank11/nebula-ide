@@ -8,6 +8,7 @@ const extensionToLanguage: Record<string, string> = {
     java: "java",
     cs: "csharp",
     cpp: "cpp",
+    c: "c",
     md: "markdown",
     xml: "xml",
     sql: "sql",

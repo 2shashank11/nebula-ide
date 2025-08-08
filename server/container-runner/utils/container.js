@@ -4,8 +4,10 @@ const path = require('path');
 
 async function createNewContainer(projectId) {
     try {
-        await docker.pull('ubuntu:latest', (err, stream) => {
-            if (err) throw err;
+        await docker.pull('2shashank11/nebula-sandbox-env', (err, stream) => {
+            if (err) {
+                console.log(err)
+                throw err};
             docker.modem.followProgress(stream, () => {
                 console.log('Ubuntu image ready');
             });
@@ -15,7 +17,7 @@ async function createNewContainer(projectId) {
         const relPath = '../user-files/' + projectId;
         const absPath = path.resolve(__dirname, relPath);
         const container = await docker.createContainer({
-            Image: 'ubuntu:latest',
+            Image: '2shashank11/nebula-sandbox-env',
             Cmd: ['/bin/bash'],
             WorkingDir: '/app',
             Tty: true,
