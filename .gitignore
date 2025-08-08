@@ -31,3 +31,4 @@ server/main-server/.env
 server/container-runner/node_modules
 server/container-runner/dist
 server/container-runner/.env
+server/container-runner/user-files

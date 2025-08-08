@@ -29,7 +29,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ selectedFile, code, language, s
                 clearTimeout(timer);
             }
         }
-    }, [code])
+    }, [socket])
 
     const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
 

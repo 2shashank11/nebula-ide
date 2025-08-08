@@ -14,7 +14,7 @@ import { openExistingProject, getFileContent } from "@/api/sandbox";
 import { toast } from "sonner";
 import { TerminalSocketProvider } from "@/context/TerminalSocketContext";
 import { getFileLanguage } from "@/lib/languages";
-import { ChevronRight, SlashIcon } from "lucide-react";
+import EditorHeader from "@/components/EditorHeader";
 
 
 export default function ProjectWorkspace() {
@@ -24,6 +24,7 @@ export default function ProjectWorkspace() {
   const [selectedFile, setSelectedFile] = useState<string>("");
   const [code, setCode] = useState<string>("Open a file and write your code here...");
   const [language, setLanguage] = useState<string>("plaintext");
+  const [saved, setSaved] = useState<boolean>(true);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -77,7 +78,7 @@ export default function ProjectWorkspace() {
         <SidebarInset>
           <SiteHeader header="Project Workspace" />
 
-          <div className="flex flex-1 flex-col">
+          <div className="flex flex-1 flex-col -mt-3">
             <div className="@container/main flex flex-1 flex-col gap-2">
               <div className="flex flex-col gap-4 py-2 md:gap-1.5 md:py-4 px-4 lg:px-4 w-full h-full overflow-hidden">
 
@@ -92,20 +93,7 @@ export default function ProjectWorkspace() {
                   {/* Code Editor Panel */}
                   <ResizablePanel defaultSize={60} minSize={20}>
                     <div className="-flex flex-col h-full">
-                      {selectedFile && (
-                        <div className="flex items-center gap-1 text-sm text-muted-foreground font-medium px-2 py-1 overflow-x-auto whitespace-nowrap">
-                          {selectedFile.slice(1).split("/").map((segment, index, arr) => (
-                            <div key={index} className="flex items-center">
-                              <span className={index === arr.length - 1 ? "font-semibold text-foreground" : "text-muted-foreground"}>
-                                {segment}
-                              </span>
-                              {index < arr.length - 1 && (
-                                <span className="mx-1 text-muted-foreground"><ChevronRight size={15}/></span>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                      <EditorHeader selectedFile={selectedFile} saved={saved} />
                       <CodeEditor
                         selectedFile={selectedFile}
                         code={code}
